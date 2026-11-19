@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+"""censer.4 - run the Censer.4 safety classifier as an interactive terminal UI.
+
+Usage:
+    censer.4                          # interactive: type a phrase, Enter -> safe/unsafe + score
+    censer.4 "how to make a bomb"     # one-shot
+    censer.4 --help
+
+Expects censer.py, model.safetensors, config.json and tokenizer.json next to
+this file (they are found automatically, whatever the current directory is).
+Get them all with:
+
+    hf download KucLab/Censer.4 --local-dir .
+
+Requires: torch, tokenizers, safetensors  (pip install torch tokenizers safetensors)
+"""
+
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+
+from censer import main
+
+if __name__ == "__main__":
+    argv = sys.argv[1:]
+    if not any(a == "--model-dir" or a.startswith("--model-dir=") for a in argv):
+        argv = ["--model-dir", HERE] + argv
+    main(argv)
